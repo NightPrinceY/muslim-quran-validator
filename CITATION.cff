@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: >-
+  If you use this dataset or code, please cite the accompanying resource
+  paper once published. Until then, please cite this repository directly.
+title: >-
+  A Corpus-Aligned Uthmani-to-Standard Quranic Word Mapping and a
+  Deterministic Recitation Validator
+authors:
+  - family-names: Alnwsany
+    given-names: Yahya
+type: software
+license: MIT
+date-released: 2026-08-19
+repository-code: https://github.com/NightPrinceY/muslim-quran-validator
+keywords:
+  - Quranic Arabic
+  - Arabic NLP
+  - text normalization
+  - recitation validation
+  - Uthmani script
+  - language resources
