@@ -19,9 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-This license applies to the code in this repository (validator/*.py, tests/*.py,
-example.py). The data files under validator/data/, tests/dataset.json, and
-results/*.json are licensed separately under CC-BY 4.0 — see DATA_LICENSE.
