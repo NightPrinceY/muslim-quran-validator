@@ -6,6 +6,7 @@ All data loaded once at startup and held in memory (~8.5 MB).
 import re
 import json
 import logging
+from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -147,20 +148,55 @@ def _relaxed_search(tokens: List[str], verse_word_sets: Dict[int, set],
 def _fuzzy_search(query: str, quran_data: List[Dict],
                   verse_normalized: Dict[int, str],
                   threshold: float = 0.45) -> List[Tuple[Dict, float]]:
-    """rapidfuzz partial_ratio — last resort when all exact/linguistic fail."""
-    try:
-        from rapidfuzz import fuzz as rfuzz
-    except ImportError:
-        logger.warning("rapidfuzz not installed — fuzzy search disabled")
+    """
+    Last resort when exact, linguistic and relaxed search all fail.
+
+    Ratcliff/Obershelp similarity via the standard library's
+    difflib.SequenceMatcher, scored as the best similarity between the query
+    and any same-length window of the verse, so that a short degraded query
+    is not penalised for the length of the verse containing it.
+
+    Deliberately stdlib-only: an optional third-party matcher would make the
+    validator's output depend on which version of that library happened to be
+    installed, which defeats the point of a deterministic validator.
+    """
+    normalized_query = normalize_arabic(query)
+    if not normalized_query:
         return []
 
-    normalized_query = normalize_arabic(query)
-    results = [
-        (v, rfuzz.partial_ratio(normalized_query, verse_normalized[v["gid"]]) / 100.0)
-        for v in quran_data
-    ]
-    results = [(v, s) for v, s in results if s >= threshold]
-    results.sort(key=lambda x: x[1], reverse=True)
+    n = len(normalized_query)
+    sm = SequenceMatcher(None, autojunk=False)
+    sm.set_seq2(normalized_query)
+
+    results: List[Tuple[Dict, float]] = []
+    for v in quran_data:
+        text = verse_normalized[v["gid"]]
+        if not text:
+            continue
+        if len(text) <= n:
+            sm.set_seq1(text)
+            if sm.real_quick_ratio() < threshold or sm.quick_ratio() < threshold:
+                continue
+            score = sm.ratio()
+        else:
+            # Best-matching window of the verse, stepped to keep this linear
+            # enough over 6,236 verses while remaining fully deterministic.
+            best = 0.0
+            step = max(1, n // 4)
+            for i in range(0, len(text) - n + 1, step):
+                sm.set_seq1(text[i:i + n])
+                if sm.real_quick_ratio() <= best or sm.quick_ratio() <= best:
+                    continue
+                r = sm.ratio()
+                if r > best:
+                    best = r
+                    if best == 1.0:
+                        break
+            score = best
+        if score >= threshold:
+            results.append((v, score))
+
+    results.sort(key=lambda x: (-x[1], x[0]["gid"]))
     return results[:30]
 
 
@@ -231,7 +267,7 @@ def find_best_verse(query: str, min_score: float = 0.5) -> Optional[Dict]:
       1. Exact AND     — all tokens must appear as whole words
       2. Linguistic    — lemma + root AND across tokens
       3. Relaxed exact — ≥60% of tokens match (handles 1 wrong/extra word)
-      4. Fuzzy         — rapidfuzz partial_ratio fallback
+      4. Fuzzy         — difflib.SequenceMatcher windowed fallback
 
     Returns the highest-scored verse dict augmented with:
       _score, _match_type, _matched_tokens

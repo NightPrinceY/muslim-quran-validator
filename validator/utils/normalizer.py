@@ -12,8 +12,10 @@ Handles:
  - Zero-width / directional chars
  - Unicode normalization (NFC)
  - Word-level Uthmani→standard map (data/uthmani_standard_map.json)
-   Provides 2017 exact word-level mappings derived from the full Quran corpus,
-   covering all ٰ (U+0670) variants with 100% accuracy from aligned data.
+   Provides 2,290 exact word-level mappings derived from the full Quran corpus
+   by tools/build_map.py, covering every ٰ (U+0670) word form the corpus
+   contains. Values may be multi-word: Uthmani writes the vocative as one word
+   (یَٰقَوۡمِ) where Standard writes two (يا قوم).
 """
 import json
 import re
@@ -44,6 +46,13 @@ _RE_TASHKEEL = re.compile(
     r'\u06D6-\u06DC\u06DF-\u06E8'    # Quranic annotation marks
     r'\u06EA-\u06FC'                  # more Quranic/Extended marks
     r'\u06E1'                         # small high dotless head of khah (Uthmani)
+    r'\u08D3-\u08FF'                 # Arabic Extended-A Quranic marks (e.g.
+                                      # U+08F1 OPEN FATHATAN). These sit between
+                                      # letters in Uthmani text, so they must be
+                                      # removed here rather than by the trailing
+                                      # non-Arabic sweep, which runs after the
+                                      # letter-level rules that need to see
+                                      # adjacent letters as adjacent.
     r']'
 )
 
@@ -63,6 +72,7 @@ _RE_HAMZA = re.compile(r'[\u0624\u0626]')                    # ؤئ → ء
 _RE_ZERO_WIDTH = re.compile(r'[\u200B-\u200F\u202A-\u202E\uFEFF]')
 _RE_NON_ARABIC = re.compile(r'[^\u0621-\u064A\s]')
 _RE_MULTI_SPACE = re.compile(r'\s+')
+_RE_HAMZA_BEFORE_ALEF = re.compile(r'\u0621(?=\u0627)')   # ءا → ا  (alef madda)
 
 
 # ── Word-level Uthmani→Standard map ─────────────────────────────────────────
@@ -144,7 +154,7 @@ def normalize_arabic(text: str) -> str:
 
     Pipeline:
       1. Unicode NFC
-      2. Word-level Uthmani→standard map (corpus-derived, 2017 entries)
+      2. Word-level Uthmani→standard map (corpus-derived, 2,290 entries)
          — replaces ٰ-containing words with their exact standard forms
       3. Remove all tashkeel and Quranic marks (U+0670 fallback handled next)
       4. Fallback: contextual U+0670 → ا (unless preceded by ى/ذ/ه/ل)
@@ -163,8 +173,12 @@ def normalize_arabic(text: str) -> str:
     text = text.replace('\u0670', '')        # step 4b: remove remaining ٰ
     text = _RE_ALEF.sub('\u0627', text)      # step 5: أإآٱ → ا
     text = _RE_HAMZA.sub('\u0621', text)     # step 6: ؤئ → ء
-    # Step 7: Uthmani word-initial ءا = standard آ (normalized to ا)
-    text = re.sub(r'(^| )\u0621(?=\u0627)', r'\1', text)
+    # Step 7: Uthmani ءا = standard آ (normalized to ا). Uthmani spells alef
+    # madda as hamza + alef wherever it occurs, not only word-initially
+    # (ٱلۡءَاخِرَة = standard الآخرة), so the rule is not anchored to a word
+    # boundary. A hamza that is a consonant in its own right is always
+    # preceded by a letter, so it is excluded by the preceding-boundary test.
+    text = _RE_HAMZA_BEFORE_ALEF.sub('', text)
     text = text.replace('\u0649', '\u064A')  # step 8: ى → ي
     text = _RE_ZERO_WIDTH.sub('', text)
     text = _RE_NON_ARABIC.sub('', text)

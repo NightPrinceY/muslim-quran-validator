@@ -32,12 +32,16 @@ from validator_mcp import validate_recitation
 
 # ── Test runner helpers ──────────────────────────────────────────────────────
 
+_section = "uncategorised"
+
+
 class TestResult:
     def __init__(self, test_id: str, label: str, passed: bool, info: str = ""):
         self.test_id = test_id
         self.label = label
         self.passed = passed
         self.info = info
+        self.section = _section
 
     def __str__(self):
         status = "✅ PASS" if self.passed else "❌ FAIL"
@@ -498,18 +502,22 @@ def main():
 
     t_total = time.perf_counter()
 
-    test_normalizer()
-    test_quran_db()
-    test_single_perfect()
-    test_single_substitution()
-    test_single_deletion()
-    test_single_tashkeel()
-    test_multi_full_surahs()
-    test_multi_with_errors()
-    test_multi_consecutive()
-    test_multi_page()
-    test_edge_cases()
-    test_from_dataset()
+    global _section
+    for _section, fn in [
+        ("normalization", test_normalizer),
+        ("corpus_access", test_quran_db),
+        ("single_perfect", test_single_perfect),
+        ("single_substitution", test_single_substitution),
+        ("single_deletion", test_single_deletion),
+        ("single_tashkeel", test_single_tashkeel),
+        ("multi_full_surah", test_multi_full_surahs),
+        ("multi_with_errors", test_multi_with_errors),
+        ("multi_consecutive", test_multi_consecutive),
+        ("multi_page", test_multi_page),
+        ("edge_cases", test_edge_cases),
+        ("dataset_driven", test_from_dataset),
+    ]:
+        fn()
 
     elapsed = (time.perf_counter() - t_total) * 1000
 
@@ -518,6 +526,49 @@ def main():
     total = len(_results)
     rate = passed / total * 100 if total else 0
     print(f"Results: {passed}/{total} passed ({rate:.1f}%)  —  {elapsed:.0f}ms total")
+
+    _write_results(passed, total, rate, elapsed)
+
+
+def _write_results(passed: int, total: int, rate: float, elapsed: float):
+    """Emit the per-category breakdown reported in the paper.
+
+    Written by the harness itself so the table is reproducible from this
+    repository rather than maintained by hand.
+    """
+    import platform
+    from collections import OrderedDict
+
+    cats: "OrderedDict[str, dict]" = OrderedDict()
+    for r in _results:
+        c = cats.setdefault(r.section, {"tests": 0, "passed": 0})
+        c["tests"] += 1
+        c["passed"] += int(r.passed)
+
+    out = {
+        "summary": {
+            "total": total,
+            "passed": passed,
+            "failed": total - passed,
+            "accuracy_pct": round(rate, 1),
+            "duration_ms": round(elapsed),
+            "python": platform.python_version(),
+            "dependencies": "standard library only",
+            "failed_cases": [r.test_id for r in _results if not r.passed],
+            "categories": cats,
+        },
+        "tests": [
+            {"id": r.test_id, "category": r.section,
+             "description": r.label, "passed": r.passed,
+             **({"info": r.info} if not r.passed and r.info else {})}
+            for r in _results
+        ],
+    }
+    path = Path(__file__).parent.parent / "results" / "validator_results.json"
+    path.parent.mkdir(exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(out, fh, ensure_ascii=False, indent=2)
+    print(f"Per-category results written to {path.relative_to(path.parent.parent)}")
     print("═" * 60)
 
     # Exit code for CI

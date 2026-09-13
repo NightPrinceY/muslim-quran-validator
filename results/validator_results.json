@@ -1,692 +1,809 @@
 {
   "summary": {
-    "date": "2026-04-29",
-    "model": "stt_ar_fastconformer_hybrid_large_pcd_v1.0",
     "total": 124,
     "passed": 123,
     "failed": 1,
     "accuracy_pct": 99.2,
-    "duration_ms": 1747,
-    "dataset_tests_passed": 62,
-    "dataset_tests_total": 62,
+    "duration_ms": 15220,
+    "python": "3.12.3",
+    "dependencies": "standard library only",
     "failed_cases": [
       "SS03"
     ],
     "categories": {
-      "exact_match": {
+      "normalization": {
+        "tests": 11,
+        "passed": 11
+      },
+      "corpus_access": {
+        "tests": 7,
+        "passed": 7
+      },
+      "single_perfect": {
         "tests": 10,
         "passed": 10
       },
-      "normalised_match": {
-        "tests": 15,
-        "passed": 15
+      "single_substitution": {
+        "tests": 4,
+        "passed": 3
       },
-      "uthmani_input": {
-        "tests": 12,
-        "passed": 12
+      "single_deletion": {
+        "tests": 3,
+        "passed": 3
       },
-      "multi_verse": {
-        "tests": 10,
-        "passed": 10
+      "single_tashkeel": {
+        "tests": 6,
+        "passed": 6
       },
-      "tashkeel_variation": {
-        "tests": 10,
-        "passed": 10
+      "multi_full_surah": {
+        "tests": 7,
+        "passed": 7
       },
-      "short_verse": {
-        "tests": 8,
-        "passed": 8
+      "multi_with_errors": {
+        "tests": 3,
+        "passed": 3
       },
-      "long_verse": {
-        "tests": 8,
-        "passed": 8
+      "multi_consecutive": {
+        "tests": 3,
+        "passed": 3
       },
-      "hamza_variants": {
-        "tests": 8,
-        "passed": 8
-      },
-      "alef_variants": {
-        "tests": 8,
-        "passed": 8
-      },
-      "error_detection": {
-        "tests": 10,
-        "passed": 10
-      },
-      "noisy_input": {
-        "tests": 10,
-        "passed": 9
+      "multi_page": {
+        "tests": 3,
+        "passed": 3
       },
       "edge_cases": {
-        "tests": 15,
-        "passed": 15
+        "tests": 5,
+        "passed": 5
+      },
+      "dataset_driven": {
+        "tests": 62,
+        "passed": 62
       }
     }
-  },
-  "known_failure": {
-    "id": "SS03",
-    "description": "Isolated word 'wahid' (one) — resolves to Q6:19 instead of Q112:1",
-    "root_cause": "word-map.json maps root w-h-d to a form with a stronger surface-form match in 6:19 than 112:1",
-    "category": "noisy_input"
   },
   "tests": [
     {
       "id": "N01",
+      "category": "normalization",
       "description": "Strip fatha",
       "passed": true
     },
     {
       "id": "N02",
+      "category": "normalization",
       "description": "Alef variants أإآ → ا",
       "passed": true
     },
     {
       "id": "N03",
+      "category": "normalization",
       "description": "Alef wasla ٱ → ا",
       "passed": true
     },
     {
       "id": "N04",
+      "category": "normalization",
       "description": "Farsi yeh → yeh",
       "passed": true
     },
     {
       "id": "N05",
+      "category": "normalization",
       "description": "Alef maqsura ى → ي",
       "passed": true
     },
     {
       "id": "N06",
+      "category": "normalization",
       "description": "Full standard_full normalize",
       "passed": true
     },
     {
       "id": "N07a",
+      "category": "normalization",
       "description": "Uthmani Bismillah: الرحمٰن→الرحمن (word-map fix)",
       "passed": true
     },
     {
       "id": "N07b",
+      "category": "normalization",
       "description": "Uthmani 2:121: كِتَٰبَ→كتاب, ءَاتَیۡنَٰهُمُ→اتيناهم, الخٰسرون→الخاسرون",
       "passed": true
     },
     {
       "id": "N08",
+      "category": "normalization",
       "description": "has_tashkeel positive",
       "passed": true
     },
     {
       "id": "N09",
+      "category": "normalization",
       "description": "has_tashkeel negative",
       "passed": true
     },
     {
       "id": "N10",
+      "category": "normalization",
       "description": "keep tashkeel normalizer preserves harakat",
       "passed": true
     },
     {
       "id": "DB01",
+      "category": "corpus_access",
       "description": "GID 1 is Fatiha 1:1",
       "passed": true
     },
     {
       "id": "DB02",
+      "category": "corpus_access",
       "description": "112:1 is Ikhlas",
       "passed": true
     },
     {
       "id": "DB03",
+      "category": "corpus_access",
       "description": "Fatiha has 7 verses",
       "passed": true
     },
     {
       "id": "DB04",
+      "category": "corpus_access",
       "description": "Sura info: Fatiha start_gid=1",
       "passed": true
     },
     {
       "id": "DB05",
+      "category": "corpus_access",
       "description": "Page 1 has 7 verses (Fatiha)",
       "passed": true
     },
     {
       "id": "DB06",
+      "category": "corpus_access",
       "description": "GID 6236 is last verse",
       "passed": true
     },
     {
       "id": "DB07",
+      "category": "corpus_access",
       "description": "GID 9999 returns None",
       "passed": true
     },
     {
       "id": "SP01",
-      "description": "Fatiha 1:1 (102.8ms)",
+      "category": "single_perfect",
+      "description": "Fatiha 1:1 (286.2ms)",
       "passed": true
     },
     {
       "id": "SP02",
-      "description": "Fatiha 1:2 (11.4ms)",
+      "category": "single_perfect",
+      "description": "Fatiha 1:2 (29.2ms)",
       "passed": true
     },
     {
       "id": "SP03",
-      "description": "Fatiha 1:4 (9.6ms)",
+      "category": "single_perfect",
+      "description": "Fatiha 1:4 (26.0ms)",
       "passed": true
     },
     {
       "id": "SP04",
-      "description": "Ikhlas 112:1 (10.7ms)",
+      "category": "single_perfect",
+      "description": "Ikhlas 112:1 (32.4ms)",
       "passed": true
     },
     {
       "id": "SP05",
-      "description": "Ikhlas 112:2 (6.6ms)",
+      "category": "single_perfect",
+      "description": "Ikhlas 112:2 (18.7ms)",
       "passed": true
     },
     {
       "id": "SP06",
-      "description": "Ikhlas 112:3 (10.0ms)",
+      "category": "single_perfect",
+      "description": "Ikhlas 112:3 (30.8ms)",
       "passed": true
     },
     {
       "id": "SP07",
-      "description": "Ikhlas 112:4 (12.2ms)",
+      "category": "single_perfect",
+      "description": "Ikhlas 112:4 (43.0ms)",
       "passed": true
     },
     {
       "id": "SP08",
-      "description": "Al-Mulk 67:1 (29.3ms)",
+      "category": "single_perfect",
+      "description": "Al-Mulk 67:1 (116.0ms)",
       "passed": true
     },
     {
       "id": "SP09",
-      "description": "Nas 114:1 (10.0ms)",
+      "category": "single_perfect",
+      "description": "Nas 114:1 (32.2ms)",
       "passed": true
     },
     {
       "id": "SP10",
-      "description": "Falaq 113:1 (10.4ms)",
+      "category": "single_perfect",
+      "description": "Falaq 113:1 (31.0ms)",
       "passed": true
     },
     {
       "id": "SS01",
+      "category": "single_substitution",
       "description": "الكريم instead of الرحيم",
       "passed": true
     },
     {
       "id": "SS02",
+      "category": "single_substitution",
       "description": "العلمين instead of العالمين",
       "passed": true
     },
     {
       "id": "SS03",
+      "category": "single_substitution",
       "description": "واحد instead of احد",
-      "passed": false
+      "passed": false,
+      "info": "is_correct=False vk=6:19 mistakes=34 wer=0.9189"
     },
     {
       "id": "SS04",
+      "category": "single_substitution",
       "description": "الطريق instead of الصراط",
       "passed": true
     },
     {
       "id": "SD01",
+      "category": "single_deletion",
       "description": "Missing word from Ikhlas 1",
       "passed": true
     },
     {
       "id": "SD02",
+      "category": "single_deletion",
       "description": "Missing word from Fatiha 2",
       "passed": true
     },
     {
       "id": "SD03",
+      "category": "single_deletion",
       "description": "Short partial Ikhlas 3",
       "passed": true
     },
     {
       "id": "ST01",
+      "category": "single_tashkeel",
       "description": "standard_full input matches verse",
       "passed": true
     },
     {
       "id": "ST02",
+      "category": "single_tashkeel",
       "description": "standard_full is_correct=True",
       "passed": true
     },
     {
       "id": "ST03",
+      "category": "single_tashkeel",
       "description": "Tashkeel report present",
       "passed": true
     },
     {
       "id": "ST04",
+      "category": "single_tashkeel",
       "description": "Tashkeel is correct",
       "passed": true
     },
     {
       "id": "ST05",
+      "category": "single_tashkeel",
       "description": "Uthmani text normalizes → matches 112:1",
       "passed": true
     },
     {
       "id": "ST06",
+      "category": "single_tashkeel",
       "description": "Uthmani is_correct=True",
       "passed": true
     },
     {
       "id": "MF01",
-      "description": "Full Fatiha (7 verses) (10.9ms)",
+      "category": "multi_full_surah",
+      "description": "Full Fatiha (7 verses) (30.8ms)",
       "passed": true
     },
     {
       "id": "MF02",
-      "description": "Full Ikhlas (4 verses) (10.8ms)",
+      "category": "multi_full_surah",
+      "description": "Full Ikhlas (4 verses) (41.2ms)",
       "passed": true
     },
     {
       "id": "MF03",
-      "description": "Full Falaq (5 verses) (10.5ms)",
+      "category": "multi_full_surah",
+      "description": "Full Falaq (5 verses) (32.7ms)",
       "passed": true
     },
     {
       "id": "MF04",
-      "description": "Full Nas (6 verses) (10.3ms)",
+      "category": "multi_full_surah",
+      "description": "Full Nas (6 verses) (28.8ms)",
       "passed": true
     },
     {
       "id": "MF05",
-      "description": "Full Nasr / An-Nasr (3 verses) (9.1ms)",
+      "category": "multi_full_surah",
+      "description": "Full Nasr / An-Nasr (3 verses) (35.5ms)",
       "passed": true
     },
     {
       "id": "MF06",
-      "description": "Full Kawthar (3 verses) (12.3ms)",
+      "category": "multi_full_surah",
+      "description": "Full Kawthar (3 verses) (38.2ms)",
       "passed": true
     },
     {
       "id": "MF07",
-      "description": "Full Masad (5 verses) (10.6ms)",
+      "category": "multi_full_surah",
+      "description": "Full Masad (5 verses) (34.1ms)",
       "passed": true
     },
     {
       "id": "ME01",
+      "category": "multi_with_errors",
       "description": "Fatiha with error in v1 → mode=multi, is_correct=False",
       "passed": true
     },
     {
       "id": "ME02",
+      "category": "multi_with_errors",
       "description": "Some verses correct (v2–v7 should be fine)",
       "passed": true
     },
     {
       "id": "ME03",
+      "category": "multi_with_errors",
       "description": "Ikhlas with error → is_correct=False, total_verses=4",
       "passed": true
     },
     {
       "id": "MC01",
-      "description": "5 verses from Juz 30 start (13.8ms)",
+      "category": "multi_consecutive",
+      "description": "5 verses from Juz 30 start (36.1ms)",
       "passed": true
     },
     {
       "id": "MC02",
-      "description": "3 Ikhlas + Falaq first verse (10.7ms)",
+      "category": "multi_consecutive",
+      "description": "3 Ikhlas + Falaq first verse (28.9ms)",
       "passed": true
     },
     {
       "id": "MC03",
-      "description": "An-Naba first 10 (9.7ms)",
+      "category": "multi_consecutive",
+      "description": "An-Naba first 10 (31.4ms)",
       "passed": true
     },
     {
       "id": "MP01",
-      "description": "Page 1 (7 verses, 11.3ms)",
+      "category": "multi_page",
+      "description": "Page 1 (7 verses, 36.1ms)",
       "passed": true
     },
     {
       "id": "MP02",
-      "description": "Page 604 (15 verses, 12.4ms)",
+      "category": "multi_page",
+      "description": "Page 604 (15 verses, 30.8ms)",
       "passed": true
     },
     {
       "id": "MP03",
-      "description": "Page 580 (25 verses, 11.0ms)",
+      "category": "multi_page",
+      "description": "Page 580 (25 verses, 30.5ms)",
       "passed": true
     },
     {
       "id": "EC01",
+      "category": "edge_cases",
       "description": "Empty input → is_correct=False",
       "passed": true
     },
     {
       "id": "EC02",
+      "category": "edge_cases",
       "description": "Non-Quran text — should not be marked correct",
       "passed": true
     },
     {
       "id": "EC03",
+      "category": "edge_cases",
       "description": "Tashkeel input normalizes → matches 112:1",
       "passed": true
     },
     {
       "id": "EC04",
+      "category": "edge_cases",
       "description": "Uthmani text normalizes → matches 112:1",
       "passed": true
     },
     {
       "id": "EC05",
+      "category": "edge_cases",
       "description": "Whitespace → is_correct=False",
       "passed": true
     },
     {
       "id": "single_perfect_1_1",
+      "category": "dataset_driven",
       "description": "Perfect recitation 1:1",
       "passed": true
     },
     {
       "id": "single_perfect_1_2",
+      "category": "dataset_driven",
       "description": "Perfect recitation 1:2",
       "passed": true
     },
     {
       "id": "single_perfect_1_7",
+      "category": "dataset_driven",
       "description": "Perfect recitation 1:7",
       "passed": true
     },
     {
       "id": "single_perfect_2_1",
+      "category": "dataset_driven",
       "description": "Perfect recitation 2:1",
       "passed": true
     },
     {
       "id": "single_perfect_2_255",
+      "category": "dataset_driven",
       "description": "Perfect recitation 2:255",
       "passed": true
     },
     {
       "id": "single_perfect_112_1",
+      "category": "dataset_driven",
       "description": "Perfect recitation 112:1",
       "passed": true
     },
     {
       "id": "single_perfect_112_2",
+      "category": "dataset_driven",
       "description": "Perfect recitation 112:2",
       "passed": true
     },
     {
       "id": "single_perfect_112_3",
+      "category": "dataset_driven",
       "description": "Perfect recitation 112:3",
       "passed": true
     },
     {
       "id": "single_perfect_112_4",
+      "category": "dataset_driven",
       "description": "Perfect recitation 112:4",
       "passed": true
     },
     {
       "id": "single_perfect_113_1",
+      "category": "dataset_driven",
       "description": "Perfect recitation 113:1",
       "passed": true
     },
     {
       "id": "single_perfect_113_5",
+      "category": "dataset_driven",
       "description": "Perfect recitation 113:5",
       "passed": true
     },
     {
       "id": "single_perfect_114_1",
+      "category": "dataset_driven",
       "description": "Perfect recitation 114:1",
       "passed": true
     },
     {
       "id": "single_perfect_114_6",
+      "category": "dataset_driven",
       "description": "Perfect recitation 114:6",
       "passed": true
     },
     {
       "id": "single_perfect_36_1",
+      "category": "dataset_driven",
       "description": "Perfect recitation 36:1",
       "passed": true
     },
     {
       "id": "single_perfect_55_1",
+      "category": "dataset_driven",
       "description": "Perfect recitation 55:1",
       "passed": true
     },
     {
       "id": "single_perfect_55_13",
+      "category": "dataset_driven",
       "description": "Perfect recitation 55:13",
       "passed": true
     },
     {
       "id": "single_perfect_67_1",
+      "category": "dataset_driven",
       "description": "Perfect recitation 67:1",
       "passed": true
     },
     {
       "id": "single_tashkeel_ok_1_1",
+      "category": "dataset_driven",
       "description": "Tashkeel correct 1:1",
       "passed": true
     },
     {
       "id": "single_tashkeel_bad_1_1",
+      "category": "dataset_driven",
       "description": "Tashkeel wrong 1:1",
       "passed": true
     },
     {
       "id": "single_tashkeel_ok_1_2",
+      "category": "dataset_driven",
       "description": "Tashkeel correct 1:2",
       "passed": true
     },
     {
       "id": "single_tashkeel_bad_1_2",
+      "category": "dataset_driven",
       "description": "Tashkeel wrong 1:2",
       "passed": true
     },
     {
       "id": "single_tashkeel_ok_112_1",
+      "category": "dataset_driven",
       "description": "Tashkeel correct 112:1",
       "passed": true
     },
     {
       "id": "single_tashkeel_bad_112_1",
+      "category": "dataset_driven",
       "description": "Tashkeel wrong 112:1",
       "passed": true
     },
     {
       "id": "single_tashkeel_ok_2_255",
+      "category": "dataset_driven",
       "description": "Tashkeel correct 2:255",
       "passed": true
     },
     {
       "id": "single_tashkeel_bad_2_255",
+      "category": "dataset_driven",
       "description": "Tashkeel wrong 2:255",
       "passed": true
     },
     {
       "id": "single_tashkeel_ok_55_1",
+      "category": "dataset_driven",
       "description": "Tashkeel correct 55:1",
       "passed": true
     },
     {
       "id": "single_tashkeel_bad_55_1",
+      "category": "dataset_driven",
       "description": "Tashkeel wrong 55:1",
       "passed": true
     },
     {
       "id": "single_sub_1_1",
+      "category": "dataset_driven",
       "description": "Substitution in 1:1",
       "passed": true
     },
     {
       "id": "single_sub_1_2",
+      "category": "dataset_driven",
       "description": "Substitution in 1:2",
       "passed": true
     },
     {
       "id": "single_sub_112_1",
+      "category": "dataset_driven",
       "description": "Substitution in 112:1",
       "passed": true
     },
     {
       "id": "single_sub_2_255",
+      "category": "dataset_driven",
       "description": "Substitution in 2:255",
       "passed": true
     },
     {
       "id": "single_sub_55_13",
+      "category": "dataset_driven",
       "description": "Substitution in 55:13",
       "passed": true
     },
     {
       "id": "single_sub_67_1",
+      "category": "dataset_driven",
       "description": "Substitution in 67:1",
       "passed": true
     },
     {
       "id": "single_del_1_2",
+      "category": "dataset_driven",
       "description": "Deletion in 1:2",
       "passed": true
     },
     {
       "id": "single_del_2_255",
+      "category": "dataset_driven",
       "description": "Deletion in 2:255",
       "passed": true
     },
     {
       "id": "single_del_112_4",
+      "category": "dataset_driven",
       "description": "Deletion in 112:4",
       "passed": true
     },
     {
       "id": "single_del_67_1",
+      "category": "dataset_driven",
       "description": "Deletion in 67:1",
       "passed": true
     },
     {
       "id": "multi_surah_1",
+      "category": "dataset_driven",
       "description": "Full surah 1 (الفاتحة)",
       "passed": true
     },
     {
       "id": "multi_surah_112",
+      "category": "dataset_driven",
       "description": "Full surah 112 (الإخلاص)",
       "passed": true
     },
     {
       "id": "multi_surah_113",
+      "category": "dataset_driven",
       "description": "Full surah 113 (الفلق)",
       "passed": true
     },
     {
       "id": "multi_surah_114",
+      "category": "dataset_driven",
       "description": "Full surah 114 (الناس)",
       "passed": true
     },
     {
       "id": "multi_surah_110",
+      "category": "dataset_driven",
       "description": "Full surah 110 (النصر)",
       "passed": true
     },
     {
       "id": "multi_surah_108",
+      "category": "dataset_driven",
       "description": "Full surah 108 (الكوثر)",
       "passed": true
     },
     {
       "id": "multi_surah_107",
+      "category": "dataset_driven",
       "description": "Full surah 107 (الماعون)",
       "passed": true
     },
     {
       "id": "multi_surah_106",
+      "category": "dataset_driven",
       "description": "Full surah 106 (قريش)",
       "passed": true
     },
     {
       "id": "multi_surah_errors_1",
+      "category": "dataset_driven",
       "description": "Full surah 1 (الفاتحة) with errors",
       "passed": true
     },
     {
       "id": "multi_surah_errors_112",
+      "category": "dataset_driven",
       "description": "Full surah 112 (الإخلاص) with errors",
       "passed": true
     },
     {
       "id": "multi_surah_errors_113",
+      "category": "dataset_driven",
       "description": "Full surah 113 (الفلق) with errors",
       "passed": true
     },
     {
       "id": "multi_range_1_7",
+      "category": "dataset_driven",
       "description": "7 consecutive verses from 1:1",
       "passed": true
     },
     {
       "id": "multi_range_5673_5682",
+      "category": "dataset_driven",
       "description": "10 consecutive verses from 78:1",
       "passed": true
     },
     {
       "id": "multi_range_5757_5764",
+      "category": "dataset_driven",
       "description": "8 consecutive verses from 79:45",
       "passed": true
     },
     {
       "id": "multi_range_6222_6225",
+      "category": "dataset_driven",
       "description": "4 consecutive verses from 112:1",
       "passed": true
     },
     {
       "id": "multi_range_6226_6230",
+      "category": "dataset_driven",
       "description": "5 consecutive verses from 113:1",
       "passed": true
     },
     {
       "id": "multi_range_200_204",
+      "category": "dataset_driven",
       "description": "5 consecutive verses from 2:193",
       "passed": true
     },
     {
       "id": "multi_page_1",
+      "category": "dataset_driven",
       "description": "Full page 1 (7 verses)",
       "passed": true
     },
     {
       "id": "multi_page_580",
+      "category": "dataset_driven",
       "description": "Full page 580 (25 verses)",
       "passed": true
     },
     {
       "id": "multi_page_600",
+      "category": "dataset_driven",
       "description": "Full page 600 (21 verses)",
       "passed": true
     },
     {
       "id": "multi_page_602",
+      "category": "dataset_driven",
       "description": "Full page 602 (14 verses)",
       "passed": true
     },
     {
       "id": "multi_page_604",
+      "category": "dataset_driven",
       "description": "Full page 604 (15 verses)",
       "passed": true
     },
     {
       "id": "edge_one_word",
+      "category": "dataset_driven",
       "description": "Single word: الله",
       "passed": true
     },
     {
       "id": "edge_not_quran",
+      "category": "dataset_driven",
       "description": "Not Quran text",
       "passed": true
     },
     {
       "id": "edge_tashkeel_input",
+      "category": "dataset_driven",
       "description": "Tashkeel input normalizes correctly",
       "passed": true
     }

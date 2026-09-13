@@ -6,11 +6,13 @@ title: >-
   A Corpus-Aligned Uthmani-to-Standard Quranic Word Mapping and a
   Deterministic Recitation Validator
 authors:
-  - family-names: Alnwsany
-    given-names: Yahya
+  - family-names: Elnawasany
+    given-names: Yahya Mohamed
+    email: yahyaalnwsany39@gmail.com
+    affiliation: Faculty of Artificial Intelligence, Kafr El-Sheikh University, Egypt
 type: software
 license: MIT
-date-released: 2026-08-19
+date-released: 2026-09-13
 repository-code: https://github.com/NightPrinceY/muslim-quran-validator
 keywords:
   - Quranic Arabic

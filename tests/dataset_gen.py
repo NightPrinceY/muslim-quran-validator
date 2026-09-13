@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 # Add parent to path so we can import quran_db etc.
-VALIDATOR_ROOT = Path(__file__).parent.parent.parent.parent / "servers" / "validator"
+VALIDATOR_ROOT = Path(__file__).parent.parent / "validator"
 sys.path.insert(0, str(VALIDATOR_ROOT))
 sys.path.insert(0, str(VALIDATOR_ROOT / "utils"))
 
