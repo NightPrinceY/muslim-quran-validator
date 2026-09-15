@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: >-
   If you use this dataset or code, please cite the accompanying resource
-  paper once published. Until then, please cite this repository directly.
+  paper (preferred-citation below).
 title: >-
   A Corpus-Aligned Uthmani-to-Standard Quranic Word Mapping and a
   Deterministic Recitation Validator
@@ -21,3 +21,16 @@ keywords:
   - recitation validation
   - Uthmani script
   - language resources
+preferred-citation:
+  type: article
+  title: >-
+    A Corpus-Aligned Uthmani-to-Standard Quranic Word Mapping and a
+    Deterministic Recitation Validator
+  authors:
+    - family-names: Elnawasany
+      given-names: Yahya Mohamed
+      email: yahyaalnwsany39@gmail.com
+  year: 2026
+  journal: arXiv
+  doi: 10.48550/arXiv.2609.14967
+  url: https://arxiv.org/abs/2609.14967

@@ -141,5 +141,27 @@ needed to use or evaluate this resource.
 
 ## Citing this work
 
-See [CITATION.cff](CITATION.cff). A formal paper citation will be added here once the
-accompanying resource paper is published.
+The accompanying resource paper is on arXiv:
+
+> Yahya Mohamed Elnawasany. *A Corpus-Aligned Uthmani-to-Standard Quranic Word Mapping
+> and a Deterministic Recitation Validator.* arXiv:2609.14967 [cs.CL], 2026.
+> <https://arxiv.org/abs/2609.14967>
+
+```bibtex
+@misc{elnawasany2026uthmani,
+  title         = {A Corpus-Aligned Uthmani-to-Standard Quranic Word Mapping
+                   and a Deterministic Recitation Validator},
+  author        = {Elnawasany, Yahya Mohamed},
+  year          = {2026},
+  eprint        = {2609.14967},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  doi           = {10.48550/arXiv.2609.14967},
+  url           = {https://arxiv.org/abs/2609.14967}
+}
+```
+
+Every number in that paper is reproduced by this repository — see
+[Quick start](#quick-start) — except the toolkit comparison, which also needs PyArabic and
+CAMeL Tools, and the deployment measurement, whose transcripts are not public.
+See also [CITATION.cff](CITATION.cff).
